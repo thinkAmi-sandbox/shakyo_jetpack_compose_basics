@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +30,8 @@ fun MyApp() {
     // 様々な画面を表示するロジックを追加し、状態をホイストする
 
     // by は毎回 .value を入力する手間を省くためのプロパティデリゲート
+    // rememberはコンポーザブルがComposition内で保持されている場合のみ機能する
+    // 画面回転させるとアクティビティ全体が再起動され、すべての状態が失われる
     var shouldShowOnbording by remember { mutableStateOf(true) }
 
     if (shouldShowOnbording) {
@@ -62,9 +66,11 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
 }
 
 @Composable
-private fun Greetings(names: List<String> = listOf("World", "Compose")) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
+private fun Greetings(names: List<String> = List(1000) { "$it"}) {
+    // LazyColumn を使って、スクロール可能にして画面に見えているぶんだけ描画する
+    LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
+        // ここの items は androidx.compose.foundation.lazy.items
+        items(items = names) { name ->
             Greeting(name = name)
         }
     }
