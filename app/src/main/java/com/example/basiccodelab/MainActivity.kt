@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +33,8 @@ fun MyApp() {
     // by は毎回 .value を入力する手間を省くためのプロパティデリゲート
     // rememberはコンポーザブルがComposition内で保持されている場合のみ機能する
     // 画面回転させるとアクティビティ全体が再起動され、すべての状態が失われる
-    var shouldShowOnbording by remember { mutableStateOf(true) }
+    // 回転などでも状態を保持するには、 rememberSaveable を使う
+    var shouldShowOnbording by rememberSaveable { mutableStateOf(true) }
 
     if (shouldShowOnbording) {
         // イベントが発生したときに通知するためのコールバックを渡す
